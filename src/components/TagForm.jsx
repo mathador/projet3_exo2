@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-//import { useDispatch } from 'react-redux';
-// import { addTag, fetchTags } from '../features/tags/tagSlice'; // Will create addTag action later
+import { useDispatch } from 'react-redux';
+import { addTag, /*fetchTags*/ } from '../features/tags/tagSlice'; 
 
 const TagForm = () => {
   const [tagName, setTagName] = useState('');
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'succeeded' | 'failed'
   const [error, setError] = useState(null);
 
@@ -18,8 +18,8 @@ const TagForm = () => {
     try {
       setStatus('loading');
       setError(null);
-      // await dispatch(addTag(tagName)).unwrap(); // Call the async thunk
-      console.log('Simulating tag creation for:', tagName); // Placeholder
+      await dispatch(addTag(tagName)) // Call the async thunk
+      //console.log('Simulating tag creation for:', tagName); // Placeholder
       setTagName('');
       setStatus('succeeded');
       // After success, you might want to refetch tags to update the list

@@ -26,7 +26,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* Add other public or private routes here */}
       </Routes>
     </div>
   );

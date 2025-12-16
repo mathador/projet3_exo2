@@ -6,7 +6,6 @@ import { setTags, setTagStatus } from '../features/tags/tagSlice';
 
 import Notes from '../components/Notes';
 import TagForm from '../components/TagForm';
-// TODO: Create these components
 import TagList from '../components/TagList';
 
 const Dashboard = () => {

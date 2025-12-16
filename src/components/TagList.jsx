@@ -9,7 +9,7 @@ const TagList = () => {
   let content;
 
   if (tagStatus === 'loading') {
-    content = <p>Loading tags...</p>;
+    content = <p>Chargement des tags...</p>;
   } else if (tagStatus === 'succeeded') {
     content = (
       <div className="flex flex-wrap gap-2">
@@ -23,12 +23,12 @@ const TagList = () => {
       </div>
     );
   } else if (tagStatus === 'failed') {
-    content = <p>Error: {error}</p>;
+    content = <p>Erreur: {error}</p>;
   }
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Available Tags</h2>
+      <h2 className="text-xl font-semibold mb-4">Tags disponibles</h2>
       {content}
     </div>
   );

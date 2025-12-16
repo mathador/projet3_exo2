@@ -9,7 +9,7 @@ const Notes = () => {
   let content;
   
   if (noteStatus === 'loading') {
-    content = <p>Loading notes...</p>;
+    content = <p>Chargement des notes...</p>;
   } else if (noteStatus === 'succeeded') {
     //console.log("Notes in state:", notes);
     content = (
@@ -25,12 +25,12 @@ const Notes = () => {
       </div>
     );
   } else if (noteStatus === 'failed') {
-    content = <p>Error: {error}</p>;
+    content = <p>Erreur: {error}</p>;
   }
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">My Notes</h2>
+      <h2 className="text-xl font-semibold mb-4">Mes notes</h2>
       {content}
     </div>
   );

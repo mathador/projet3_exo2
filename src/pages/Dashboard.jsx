@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">Tableau de bord</h1>
 
       {/* Notes Component */}
       <div className="mt-6 p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900">

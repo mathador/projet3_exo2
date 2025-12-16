@@ -11,7 +11,7 @@ const TagForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!tagName.trim()) {
-      setError('Tag name cannot be empty.');
+      setError('Le nom du tag ne peut pas être vide.');
       return;
     }
 
@@ -25,18 +25,18 @@ const TagForm = () => {
       // After success, you might want to refetch tags to update the list
       // dispatch(fetchTags()); // Uncomment when addTag and fetchTags are fully implemented
     } catch (err) {
-      setError(err.message || 'Failed to create tag.');
+      setError(err.message || 'La création du tag a échoué.');
       setStatus('failed');
     }
   };
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Create New Tag</h2>
+      <h2 className="text-xl font-semibold mb-4">Créer un nouveau tag</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label htmlFor="tagName" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-            Tag Name
+            Nom du tag
           </label>
           <input
             type="text"
@@ -52,10 +52,10 @@ const TagForm = () => {
           className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
           disabled={status === 'loading'}
         >
-          {status === 'loading' ? 'Creating...' : 'Create Tag'}
+          {status === 'loading' ? 'Création...' : 'Créer le tag'}
         </button>
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        {status === 'succeeded' && !error && <p className="text-green-500 text-sm">Tag created successfully!</p>}
+        {status === 'succeeded' && !error && <p className="text-green-500 text-sm">Tag créé avec succès!</p>}
       </form>
     </div>
   );

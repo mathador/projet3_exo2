@@ -32,7 +32,7 @@ const LoginPage = () => {
         }
         dispatch(setUser(payload.user || { email: email }));
       } catch (err) {
-        dispatch(setAuthError(err.data?.message || 'Failed to login'));
+        dispatch(setAuthError(err.data?.message || 'La connexion a échoué'));
       }
     }
   };
@@ -40,7 +40,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-100 dark:bg-neutral-900">
       <div className="bg-white dark:bg-neutral-800 p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-neutral-800 dark:text-neutral-100">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-neutral-800 dark:text-neutral-100">Connexion</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -57,7 +57,7 @@ const LoginPage = () => {
           </div>
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-              Password
+              Mot de passe
             </label>
             <input
               type="password"
@@ -73,7 +73,7 @@ const LoginPage = () => {
             className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             disabled={isLoading || isFetchingCsrf}
           >
-            {isLoading || isFetchingCsrf ? 'Logging in...' : 'Login'}
+            {isLoading || isFetchingCsrf ? 'Connexion en cours...' : 'Connexion'}
           </button>
           {error && <p className="mt-2 text-sm text-red-600 text-center">{error}</p>}
         </form>

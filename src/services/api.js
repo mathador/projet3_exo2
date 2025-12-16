@@ -1,28 +1,46 @@
-import axios from 'axios';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const API_BASE_URL = 'http://monolithic-app.test/api';
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
-  withCredentials: true, // Important for sending cookies, e.g., for Sanctum authentication
+export const api = createApi({
+  reducerPath: 'api',
+  baseQuery: fetchBaseQuery({
+    baseUrl: API_BASE_URL,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`);
+      }
+      headers.set('Accept', 'application/json');
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    getTags: builder.query({
+      query: () => '/tags',
+    }),
+    getNotes: builder.query({
+      query: () => '/notes',
+    }),
+    login: builder.mutation({
+        query: (credentials) => ({
+          url: '/auth/login',
+          method: 'POST',
+          body: credentials,
+        }),
+      }),
+      logout: builder.mutation({
+        query: () => ({
+          url: '/auth/logout',
+          method: 'POST',
+        }),
+      }),
+  }),
 });
 
-// Optional: Add an interceptor to include the Bearer token if available
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('authToken'); // Or wherever you store your token
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-export default api;
+export const {
+  useGetTagsQuery,
+  useGetNotesQuery,
+  useLoginMutation,
+  useLogoutMutation,
+} = api;

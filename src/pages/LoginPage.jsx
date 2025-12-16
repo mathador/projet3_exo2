@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../features/auth/authSlice';
+import { useLoginMutation } from '../services/api';
+import { useGetCsrfCookieQuery } from '../services/apiCsrf';
+import { setUser, setAuthError } from '../features/auth/authSlice';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -9,7 +11,10 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isAuthenticated, status, error } = useSelector((state) => state.auth);
+  const { isAuthenticated, error } = useSelector((state) => state.auth);
+  const [login, { isLoading }] = useLoginMutation();
+  const { data: isFetchingCsrf } = useGetCsrfCookieQuery();
+
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -17,10 +22,18 @@ const LoginPage = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (email && password) {
-      dispatch(loginUser({ email, password }));
+      try {
+        const payload = await login({ email, password }).unwrap();
+        if (payload.token) {
+          localStorage.setItem('authToken', payload.token);
+        }
+        dispatch(setUser(payload.user || { email: email }));
+      } catch (err) {
+        dispatch(setAuthError(err.data?.message || 'Failed to login'));
+      }
     }
   };
 
@@ -58,9 +71,9 @@ const LoginPage = () => {
           <button
             type="submit"
             className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-            disabled={status === 'loading'}
+            disabled={isLoading || isFetchingCsrf}
           >
-            {status === 'loading' ? 'Logging in...' : 'Login'}
+            {isLoading || isFetchingCsrf ? 'Logging in...' : 'Login'}
           </button>
           {error && <p className="mt-2 text-sm text-red-600 text-center">{error}</p>}
         </form>

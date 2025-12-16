@@ -1,18 +1,10 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchTags } from '../features/tags/tagSlice';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 const TagList = () => {
   const tags = useSelector((state) => state.tags.items);
   const tagStatus = useSelector((state) => state.tags.status);
   const error = useSelector((state) => state.tags.error);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (tagStatus === 'idle') {
-      dispatch(fetchTags());
-    }
-  }, [tagStatus, dispatch]);
 
   let content;
 
@@ -21,11 +13,13 @@ const TagList = () => {
   } else if (tagStatus === 'succeeded') {
     content = (
       <div className="flex flex-wrap gap-2">
-        {tags.data.map((tag) => (
-          <span key={tag.id} className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm">
-            {tag.name}
-          </span>
-        ))}
+        <ul>
+          {tags.map((tag) => (
+            <li key={tag.id} >
+              {tag.name}
+            </li>
+          ))}
+        </ul>
       </div>
     );
   } else if (tagStatus === 'failed') {

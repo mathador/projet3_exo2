@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+//import { useDispatch } from 'react-redux';
 // import { addTag, fetchTags } from '../features/tags/tagSlice'; // Will create addTag action later
 
 const TagForm = () => {
   const [tagName, setTagName] = useState('');
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'succeeded' | 'failed'
   const [error, setError] = useState(null);
 

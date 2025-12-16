@@ -1,11 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../services/api';
-
-// Placeholder for the real API call
-export const fetchNotes = createAsyncThunk('notes/fetchNotes', async () => {
-  const response = await api.get('/notes');
-  return response.data;
-});
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   items: [],
@@ -17,22 +10,15 @@ const notesSlice = createSlice({
   name: 'notes',
   initialState,
   reducers: {
-    // Reducers for adding, updating, and deleting notes will be added here.
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchNotes.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchNotes.fulfilled, (state, action) => {
+    setNotes: (state, action) => {
+        state.items = action.payload.data;
         state.status = 'succeeded';
-        state.items = action.payload;
-      })
-      .addCase(fetchNotes.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
+    },
+    setNoteStatus: (state, action) => {
+        state.status = action.payload;
+    }
   },
 });
 
+export const { setNotes, setNoteStatus } = notesSlice.actions;
 export default notesSlice.reducer;

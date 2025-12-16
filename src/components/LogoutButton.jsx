@@ -1,13 +1,16 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '../features/auth/authSlice';
+import { useLogoutMutation } from '../services/api';
+import { clearAuth } from '../features/auth/authSlice';
 
 function LogoutButton() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [logout] = useLogoutMutation();
 
   const handleLogout = async () => {
-    await dispatch(logoutUser());
+    await logout();
+    dispatch(clearAuth());
     navigate('/login');
   };
 

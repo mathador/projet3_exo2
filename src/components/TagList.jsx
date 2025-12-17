@@ -16,7 +16,7 @@ const TagList = () => {
       <div className="flex flex-wrap gap-2">
         <ul>
           {tags.map((tag) => (
-            <li key={tag.id}>
+            <li key={tag.id} id={tag.id}>
               {tag.name}
             </li>
           ))}

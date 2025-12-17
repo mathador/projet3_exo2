@@ -16,7 +16,7 @@ const Notes = () => {
     content = (
       <div>
         {notes.map((note) => (
-          <div key={note.id}>
+          <div key={note.id} id={note.id} >
             <p>{note.text}</p>
             {note.tag && (
               <div className="flex flex-wrap gap-1 mt-2">

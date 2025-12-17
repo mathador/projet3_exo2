@@ -40,17 +40,6 @@ export const api = createApi({
       }),
       invalidatesTags: [{ type: 'Tag', id: 'LIST' }],
     }),
-    updateTag: builder.mutation({
-      query: (tag) => ({
-        url: `/tags/${tag.id}`,
-        method: 'PUT',
-        body: tag,
-      }),
-      invalidatesTags: (result, error, tag) => [
-        { type: 'Tag', id: tag.id },
-        { type: 'Tag', id: 'LIST' },
-      ],
-    }),
     removeTag: builder.mutation({
       query: (id) => ({
         url: `/tags/${id}`,
@@ -88,11 +77,10 @@ export const api = createApi({
 });
 
 export const {
-  useGetTagsQuery,
-  useGetNotesQuery,
   useLoginMutation,
   useLogoutMutation,
+  useGetNotesQuery,
+  useGetTagsQuery,
   useAddTagMutation,
-  useUpdateTagMutation,
   useRemoveTagMutation,
 } = api;

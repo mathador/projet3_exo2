@@ -10,8 +10,9 @@ const Notes = () => {
     content = <p>Chargement des notes...</p>;
   } else if (isError) {
     content = <p>Erreur: {error?.data?.message || 'Une erreur est survenue lors du chargement des notes.'}</p>;
-  } else if (data && Array.isArray(data.data)) {
-    const notes = data.data;
+  } else if (data) {
+    const notes = Array.isArray(data) ? data : Array.isArray(data.data) ? data.data : [];
+
     content = (
       <div>
         {notes.map((note) => (

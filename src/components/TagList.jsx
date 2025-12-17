@@ -10,8 +10,8 @@ const TagList = () => {
     content = <p>Chargement des tags...</p>;
   } else if (isError) {
     content = <p>Erreur: {error?.data?.message || 'Une erreur est survenue lors du chargement des tags.'}</p>;
-  } else if (data && Array.isArray(data.data)) {
-    const tags = data.data;
+  } else if (data) {
+    const tags = Array.isArray(data) ? data : Array.isArray(data.data) ? data.data : [];
     content = (
       <div className="flex flex-wrap gap-2">
         <ul>

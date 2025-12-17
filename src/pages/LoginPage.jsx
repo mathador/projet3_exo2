@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../services/api';
+import { useLoginMutation, api } from '../services/api';
 import { useGetCsrfCookieQuery } from '../services/apiCsrf';
 import { setUser, setAuthError } from '../features/auth/authSlice';
 
@@ -30,6 +30,7 @@ const LoginPage = () => {
         if (payload.token) {
           localStorage.setItem('authToken', payload.token);
         }
+        dispatch(api.util.resetApiState());
         dispatch(setUser(payload.user || { email: email }));
       } catch (err) {
         dispatch(setAuthError(err.data?.message || 'La connexion a échoué'));

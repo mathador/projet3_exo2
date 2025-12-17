@@ -1,29 +1,30 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useGetTagsQuery } from '../services/api';
 
 const TagList = () => {
-  const tags = useSelector((state) => state.tags.items);
-  const tagStatus = useSelector((state) => state.tags.status);
-  const error = useSelector((state) => state.tags.error);
+  const { data, isLoading, isError, error } = useGetTagsQuery();
 
   let content;
 
-  if (tagStatus === 'loading') {
+  if (isLoading) {
     content = <p>Chargement des tags...</p>;
-  } else if (tagStatus === 'succeeded') {
+  } else if (isError) {
+    content = <p>Erreur: {error?.data?.message || 'Une erreur est survenue lors du chargement des tags.'}</p>;
+  } else if (data && Array.isArray(data.data)) {
+    const tags = data.data;
     content = (
       <div className="flex flex-wrap gap-2">
         <ul>
           {tags.map((tag) => (
-            <li key={tag.id} >
+            <li key={tag.id}>
               {tag.name}
             </li>
           ))}
         </ul>
       </div>
     );
-  } else if (tagStatus === 'failed') {
-    content = <p>Erreur: {error}</p>;
+  } else {
+    content = <p>Aucun tag à afficher.</p>;
   }
 
   return (

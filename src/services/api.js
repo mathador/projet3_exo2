@@ -4,6 +4,7 @@ const API_BASE_URL = 'http://monolithic-app.test/api';
 
 export const api = createApi({
   reducerPath: 'api',
+  tagTypes: ['Tag'],
   baseQuery: fetchBaseQuery({
     baseUrl: API_BASE_URL,
     prepareHeaders: (headers) => {
@@ -18,6 +19,13 @@ export const api = createApi({
   endpoints: (builder) => ({
     getTags: builder.query({
       query: () => '/tags',
+      providesTags: (result) =>
+        result && Array.isArray(result.data)
+          ? [
+              ...result.data.map((tag) => ({ type: 'Tag', id: tag.id })),
+              { type: 'Tag', id: 'LIST' },
+            ]
+          : [{ type: 'Tag', id: 'LIST' }],
     }),
     getTagById: builder.query({
       query: (id) => '/tags/' + id,
@@ -27,19 +35,31 @@ export const api = createApi({
         url: '/tags',
         method: 'POST',
         body: {
-          name:  tagName,
-        }
+          name: tagName,
+        },
       }),
+      invalidatesTags: [{ type: 'Tag', id: 'LIST' }],
     }),
     updateTag: builder.mutation({
-      query: (_tag) => ({
-        method: 'POST',
-        body: _tag,
+      query: (tag) => ({
+        url: `/tags/${tag.id}`,
+        method: 'PUT',
+        body: tag,
       }),
+      invalidatesTags: (result, error, tag) => [
+        { type: 'Tag', id: tag.id },
+        { type: 'Tag', id: 'LIST' },
+      ],
     }),
     removeTag: builder.mutation({
-      query: (id) => '/tags/' + id,
-      method: 'DELETE',
+      query: (id) => ({
+        url: `/tags/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: 'Tag', id },
+        { type: 'Tag', id: 'LIST' },
+      ],
     }),
     getNotes: builder.query({
       query: () => '/notes',
@@ -58,9 +78,10 @@ export const api = createApi({
       }),
     }),
     register: builder.mutation({
-      query: () => ({
+      query: (body) => ({
         url: '/auth/register',
         method: 'POST',
+        body,
       }),
     }),
   })
@@ -71,4 +92,7 @@ export const {
   useGetNotesQuery,
   useLoginMutation,
   useLogoutMutation,
+  useAddTagMutation,
+  useUpdateTagMutation,
+  useRemoveTagMutation,
 } = api;

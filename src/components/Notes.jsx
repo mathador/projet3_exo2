@@ -1,31 +1,33 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useGetNotesQuery } from '../services/api';
 
 const Notes = () => {
-  const notes = useSelector((state) => state.notes.items);
-  const noteStatus = useSelector((state) => state.notes.status);
-  const error = useSelector((state) => state.notes.error);
-  
+  const { data, isLoading, isError, error } = useGetNotesQuery();
+
   let content;
-  
-  if (noteStatus === 'loading') {
+
+  if (isLoading) {
     content = <p>Chargement des notes...</p>;
-  } else if (noteStatus === 'succeeded') {
-    //console.log("Notes in state:", notes);
+  } else if (isError) {
+    content = <p>Erreur: {error?.data?.message || 'Une erreur est survenue lors du chargement des notes.'}</p>;
+  } else if (data && Array.isArray(data.data)) {
+    const notes = data.data;
     content = (
-      <div >
+      <div>
         {notes.map((note) => (
-          <div key={note.id} >
-            <p >{note.text}</p>
-            <div className="flex flex-wrap gap-1 mt-2">
-                <span key={note.tag.id} >{note.tag.name}</span>
-            </div>
+          <div key={note.id}>
+            <p>{note.text}</p>
+            {note.tag && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                <span>{note.tag.name}</span>
+              </div>
+            )}
           </div>
         ))}
       </div>
     );
-  } else if (noteStatus === 'failed') {
-    content = <p>Erreur: {error}</p>;
+  } else {
+    content = <p>Aucune note à afficher.</p>;
   }
 
   return (
